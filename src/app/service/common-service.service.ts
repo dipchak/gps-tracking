@@ -1,56 +1,46 @@
-import { Injectable, OnInit, EventEmitter, Output } from '@angular/core';
-//import { Observable } from 'rxjs/Observable';
-//import 'rxjs/add/observable/of';
-
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
+export class CommonServiceService {
+   url = 'https://jsonplaceholder.typicode.com/todos/1';
+  constructor(private httpclient: HttpClient) { }
+
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+      'Authorization': 'my-auth-token'
+    })
+  };
 
 
 
-export class CommonServiceService implements OnInit {  
-  status : boolean = false;
-  @Output() deviceNumber = new EventEmitter<number>(); 
-  
-  
-  tempData: any = [
-    {
-        'deviceid' : 1347,
-        'name': 'BMW M5',
-        'date':'2018-12-11',
-        'time':'12:13:55',
-        'speed':'15 kph',
-        'status':'Online',
-    },
-    {
-        'deviceid' : 1348,
-        'name': 'BMW M6',
-        'date':'2018-12-11',
-        'time':'12:13:55',
-        'speed':'15 kph',
-        'status':'Ofline',      
-  },
-  {
-        'deviceid' : 1349,
-        'name': 'BMW M7',
-        'date':'2019-12-11',
-        'time':'12:13:55',
-        'speed':'15 kph',
-        'status':'Ofline',      
+
+getcustomerdatabyphone() {
+    const  promise = new Promise((resolve, reject) => {
+    this.httpclient.get(this.url, this.httpOptions).subscribe((res) => {
+      resolve(res);
+      } ,  error => {
+        reject();
+      });
+});
+  return promise;
 }
-    
-];
-  constructor() { }
-
-  ngOnInit() {
-
-  }
-
-  detaemit ( data){
-    this.deviceNumber.emit(data); 
-  }
 
 
+postcustomerdata() {
+  const  promise = new Promise((resolve, reject) => {
+  this.httpclient.post(this.url, 'data', this.httpOptions).subscribe((res) => {
+    resolve(res);
+    } ,  error => {
+      reject();
+    });
+});
+
+return promise;
+
+}
 
 }
